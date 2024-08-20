@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize')
 
-const sequelize = new Sequelize( "way", "avnadmin", "AVNS_xAt7KNlYrkTcoryod9x", {
-    host: "way-raapphaaeell-b0c3.k.aivencloud.com",
+const sequelize = new Sequelize( "BD23334", "BD23334", "BD23334", {// troque pelo seu ra
+    host: "regulus.cotuca.unicamp.br",
     dialect: 'mysql',
-    port: 15186,
+    port: 3306,
     dialectOptions: {
         connectTimeOut: 10000
     }
