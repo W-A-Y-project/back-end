@@ -1,17 +1,32 @@
-const Sequelize = require('sequelize')
+const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize( "BD23334", "BD23334", "BD23334", {// troque pelo seu ra
-    host: "regulus.cotuca.unicamp.br",
+// Configuração da conexão
+const sequelize = new Sequelize("way", "avnadmin", "AVNS_xAt7KNlYrkTcoryod9x", {
+    host: "way-raapphaaeell-b0c3.k.aivencloud.com",
     dialect: 'mysql',
-    port: 3306,
+    port: 15186,
     dialectOptions: {
-        connectTimeOut: 10000
+        ssl: {
+            require: true,
+            rejectUnauthorized: false // Para bancos de dados que utilizam SSL, mas não possuem certificado assinado por uma autoridade confiável
+        },
+        connectTimeout: 10000 // Tempo limite de conexão em milissegundos
     }
-}) //connection
+});
 
-sequelize.authenticate().then(function(){
-    console.log("Conexão realizada com sucesso!")
+// Autenticar a conexão
+sequelize.authenticate()
+    .then(() => {
+        console.log("Conexão realizada com sucesso!");
 
-}).catch((err) => console.log(err))
+        // Sincronizar o banco de dados com os modelos
+        return sequelize.sync({ alter: true });
+    })
+    .then(() => {
+        console.log('Database synchronized');
+    })
+    .catch((err) => {
+        console.error("Erro na conexão ou sincronização do banco de dados:", err);
+    });
 
 module.exports = sequelize;

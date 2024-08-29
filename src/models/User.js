@@ -16,10 +16,10 @@ const User = sequelize.define('User', {
         allowNull: false
     },
     Password: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(255), // Aumentar o comprimento para suportar o hash completo
         allowNull: false,
         validate: {
-            len: [8, 20]
+            len: [8, 255] // Ajustar a validação para refletir o novo comprimento
         }
     },
     Phone: {

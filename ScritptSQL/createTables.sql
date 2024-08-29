@@ -8,3 +8,9 @@ CREATE TABLE User (
     State VARCHAR(30) NOT NULL,
     PostalCode CHAR(8) NOT NULL
 );
+
+ALTER TABLE User
+CHANGE Password UserPassword VARCHAR(255) NOT NULL;
+
+ALTER TABLE User
+DROP CHECK User_chk_1;
