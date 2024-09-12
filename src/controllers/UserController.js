@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const login = async (req, res) => {
+    console.log('Recebendo login:', req.body);
     const { email, password } = req.body;
 
     try {
@@ -28,6 +29,10 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     const { cpf, fullName, email, password, phone, city, state, postalCode } = req.body;
 
+    const cleanCPF = cpf.replace(/\D/g, ''); 
+    const cleanPhone = phone.replace(/\D/g, ''); 
+    const cleanPostalCode  = postalCode.replace(/\D/g, ''); 
+
     try {
         const existingUser = await User.findOne({ where: { Email: email } });
         if (existingUser) {
@@ -42,14 +47,14 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await User.create({
-            CPF: cpf,
+            CPF: cleanCPF,
             FullName: fullName,
             Email: email,
             Password: hashedPassword,
-            Phone: phone,
+            Phone: cleanPhone,
             City: city,
             State: state,
-            PostalCode: postalCode
+            PostalCode: cleanPostalCode,
         });
 
         res.status(201).json({ message: 'User registered successfully', user: newUser });
@@ -63,3 +68,15 @@ module.exports = {
     login,
     register
 };
+/*
+{
+    "cpf": "24505475840",
+    "fullName": "Hemilly Soares de Sousa",
+    "email": "hemillysoares126@gmail.com",
+    "password": "hemilly123",
+    "phone": "19992134213",
+    "city": "Campinas",
+    "state": "SP",
+    "postalCode": "13054279"
+  }
+  */
