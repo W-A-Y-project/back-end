@@ -39,7 +39,7 @@ const register = async (req, res) => {
             return res.status(400).json({ error: 'Email already in use' });
         }
 
-        const existingCpf = await User.findOne({ where: { CPF: cpf } });
+        const existingCpf = await User.findOne({ where: { CPF: cleanCPF } });
         if (existingCpf) {
             return res.status(400).json({ error: 'CPF already in use' });
         }
@@ -56,7 +56,7 @@ const register = async (req, res) => {
             State: state,
             PostalCode: cleanPostalCode,
         });
-
+        
         res.status(201).json({ message: 'User registered successfully', user: newUser });
     } catch (error) {
         console.error('Error during registration:', error.message);
@@ -68,15 +68,4 @@ module.exports = {
     login,
     register
 };
-/*
-{
-    "cpf": "24505475840",
-    "fullName": "Hemilly Soares de Sousa",
-    "email": "hemillysoares126@gmail.com",
-    "password": "hemilly123",
-    "phone": "19992134213",
-    "city": "Campinas",
-    "state": "SP",
-    "postalCode": "13054279"
-  }
-  */
+
