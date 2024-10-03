@@ -10,6 +10,9 @@ CREATE TABLE User (
 );
 
 ALTER TABLE User
+ADD Photo BLOB;
+
+ALTER TABLE User
 CHANGE Password UserPassword VARCHAR(255) NOT NULL;
 
 ALTER TABLE User
@@ -35,5 +38,7 @@ CREATE TABLE DISAPPEARED (
     BO_DOCUMENT BLOB NOT NULL,  
     BO_VERIFIED ENUM('True', 'False', 'Pending') DEFAULT 'Pending'
 
+    ALTER TABLE DISAPPEARED
+    ADD Photo BLOB;
 );
 
