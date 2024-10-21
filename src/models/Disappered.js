@@ -7,6 +7,10 @@ const Disappeared = sequelize.define('Disappeared', {
         primaryKey: true,
         allowNull: false
     },
+    Photo: {
+        type: DataTypes.BLOB,
+        allowNull: false
+    },
     FullName: {
         type: DataTypes.STRING(255),
         allowNull: false
@@ -27,8 +31,16 @@ const Disappeared = sequelize.define('Disappeared', {
         type: DataTypes.DATEONLY,
         allowNull: false
     },
-    HomeAddress: {
-        type: DataTypes.STRING(255),
+    City: {
+        type: DataTypes.STRING(30),
+        allowNull: false
+    },
+    State: {
+        type: DataTypes.STRING(30),
+        allowNull: false
+    },
+    PostalCode: {
+        type: DataTypes.CHAR(8),
         allowNull: false
     },
     SkinColor: {
@@ -53,7 +65,7 @@ const Disappeared = sequelize.define('Disappeared', {
     },
     IllnessDescription: {
         type: DataTypes.TEXT,
-        allowNull: true, // This field is optional and should only be filled if 'Illness' is true
+        allowNull: true // Campo opcional, preenchido apenas se 'Illness' for true
     },
     ClothingWorn: {
         type: DataTypes.TEXT,
@@ -65,18 +77,17 @@ const Disappeared = sequelize.define('Disappeared', {
     },
     VehicleDescription: {
         type: DataTypes.TEXT,
-        allowNull: true // This field is optional and should only be filled if 'Vehicle' is true
+        allowNull: true // Campo opcional, preenchido apenas se 'Vehicle' for true
     },
-  /*  BoDocument: {
-        type: DataTypes.BLOB, // Campo para armazenar o documento PDF
-        allowNull: true
+    BoDocument: {
+        type: DataTypes.BLOB, // Documento PDF
+        allowNull: false
     },
     BoVerified: {
         type: DataTypes.ENUM('True', 'False', 'Pending'),
-        allowNull: false, // Garante que este campo não pode ser nulo
+        allowNull: false,
         defaultValue: 'Pending' // Valor padrão
     }
-        */
 }, {
     tableName: 'Disappeared',
     timestamps: false
