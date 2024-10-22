@@ -1,4 +1,4 @@
-const { Disappeared } = require('../models'); // Certifique-se de que o modelo Disappeared esteja corretamente definido no Sequelize
+const { Disappeared } = require('../models/Disappered'); // Certifique-se de que o modelo Disappeared esteja corretamente definido no Sequelize
 
 const registerDisappeared = async (req, res) => {
     const { 
@@ -8,7 +8,9 @@ const registerDisappeared = async (req, res) => {
         gender, 
         lastSeenLocation, 
         lastSeenDate, 
-        homeAddress, 
+        city,
+        state,
+        postalCode,
         skinColor, 
         eyeColor, 
         characteristics, 
@@ -39,7 +41,9 @@ const registerDisappeared = async (req, res) => {
             GENDER: gender,
             LAST_SEEN_LOCATION: lastSeenLocation,
             LAST_SEEN_DATE: lastSeenDate,
-            HOME_ADDRESS: homeAddress,
+            CITY: city,
+            STATE: state,
+            POSTAL_CODE: postalCode,
             SKIN_COLOR: skinColor,
             EYE_COLOR: eyeColor,
             CHARACTERISTICS: characteristics || null,  // Se não fornecido, será nulo

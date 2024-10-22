@@ -3,6 +3,7 @@ const cors = require('cors');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const UserController = require('./controllers/UserController'); 
+const DisappearedController = require('./controllers/DisappearedController'); 
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 
 app.post('/login', UserController.login); 
 app.post('/register', UserController.register); 
+app.post('./register-disappeared', DisappearedController.registerDisappeared)
 
 app.listen(port, () => {
     console.log(`Servidor iniciado na porta: ${port}`); // Corrigi a sintaxe da template string
