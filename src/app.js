@@ -30,8 +30,8 @@ app.get("/", (req, res) => {
 });
 
 app.post('/login', UserController.login); 
-app.post('/register', UserController.register); 
-app.post('./register-disappeared', DisappearedController.registerDisappeared)
+app.post('/register', UserController.register);
+app.post('/create-disappeared', DisappearedController.createDisappeared)
 
 app.listen(port, () => {
     console.log(`Servidor iniciado na porta: ${port}`); // Corrigi a sintaxe da template string

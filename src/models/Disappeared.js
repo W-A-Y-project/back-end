@@ -1,5 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('./db');
+const { DataTypes } = require('sequelize');
+const sequelize = require('./db'); // Certifique-se de que o caminho está correto
 
 const Disappeared = sequelize.define('Disappeared', {
     CPF: {
@@ -65,7 +65,7 @@ const Disappeared = sequelize.define('Disappeared', {
     },
     IllnessDescription: {
         type: DataTypes.TEXT,
-        allowNull: true // Campo opcional, preenchido apenas se 'Illness' for true
+        allowNull: true
     },
     ClothingWorn: {
         type: DataTypes.TEXT,
@@ -77,19 +77,19 @@ const Disappeared = sequelize.define('Disappeared', {
     },
     VehicleDescription: {
         type: DataTypes.TEXT,
-        allowNull: true // Campo opcional, preenchido apenas se 'Vehicle' for true
+        allowNull: true
     },
     BoDocument: {
-        type: DataTypes.BLOB, // Documento PDF
+        type: DataTypes.BLOB,
         allowNull: false
     },
     BoVerified: {
         type: DataTypes.ENUM('True', 'False', 'Pending'),
         allowNull: false,
-        defaultValue: 'Pending' // Valor padrão
+        defaultValue: 'Pending'
     }
 }, {
-    tableName: 'Disappeared',
+    tableName: 'DISAPPEARED',
     timestamps: false
 });
 
