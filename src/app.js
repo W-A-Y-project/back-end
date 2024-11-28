@@ -30,9 +30,8 @@ app.use(express.json());
 app.get("/", (req, res) => res.send("Página inicial"));
 app.post('/login', UserController.login); 
 app.post('/register', UserController.register); 
-app.post('/register-disappeared', DisappearedController.registerDisappeared);
+app.post('/create-disappeared', DisappearedController.createDisappeared)
 
-// Rotas para mensagens
 app.get('/api/messages/:chatID', MessageController.getMessages);  // Obter mensagens
 app.post('/api/messages', MessageController.sendMessage);  // Enviar mensagem
 
