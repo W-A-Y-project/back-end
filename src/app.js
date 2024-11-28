@@ -4,6 +4,8 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const UserController = require('./controllers/UserController'); 
 const DisappearedController = require('./controllers/DisappearedController'); 
+const MessageController = require('./controllers/MessageController'); 
+const ChatController = require('./controllers/ChatController');
 
 dotenv.config();
 
@@ -11,28 +13,33 @@ const port = 3000;
 const app = express();
 
 app.use(cors({
-    origin: '*',  // Ou especifique a origem do frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Métodos permitidos
-    allowedHeaders: ['Content-Type', 'Authorization'],  // Cabeçalhos permitidos
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(session({
     secret: process.env.SESSION_SECRET || 'mysecret',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } 
+    cookie: { secure: false }
 }));
 
 app.use(express.json());
 
-// Rotas
-app.get("/", (req, res) => {
-    res.send("Página inicial");
-});
-
+// Rotas existentes
+app.get("/", (req, res) => res.send("Página inicial"));
 app.post('/login', UserController.login); 
 app.post('/register', UserController.register); 
-app.post('./register-disappeared', DisappearedController.registerDisappeared)
+app.post('/register-disappeared', DisappearedController.registerDisappeared);
+
+// Rotas para mensagens
+app.get('/api/messages/:chatID', MessageController.getMessages);  // Obter mensagens
+app.post('/api/messages', MessageController.sendMessage);  // Enviar mensagem
+
+
+app.post('/api/createChatIfNotExists', ChatController.createChatIfNotExists);
+
 
 app.listen(port, () => {
-    console.log(`Servidor iniciado na porta: ${port}`); // Corrigi a sintaxe da template string
+    console.log(`Servidor iniciado na porta: ${port}`);
 });
