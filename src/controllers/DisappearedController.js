@@ -107,8 +107,61 @@ const createDisappeared = async (req, res) => {
       });
     }
   };
+
+  const getAllDisappeared = async (req, res) => {
+    try {
+      const disappearedPeople = await Disappeared.findAll({
+        attributes: [
+          'Cpf', // Usado como chave
+          ['FullName', 'name'],
+          'Gender',
+          ['BirthDate', 'birthDate'], // Para calcular idade
+          ['LastSeenLocation', 'lastView'],
+          ['LastSeenDate', 'dateMiss'],
+          ['City', 'address'],
+          ['SkinColor', 'skin'],
+          ['EyeColor', 'eyesColor'],
+          'Characteristics',
+          'Hair',
+          ['IllnessDescription', 'illnessDescription'],
+          'ClothingWorn',
+          ['VehicleDescription', 'vehicleDescription'],
+          'Photo' // BLOB do banco
+        ]
+      });
+  
+      // Processa os dados
+      const processedPeople = disappearedPeople.map(person => {
+        const personData = person.get({ plain: true });
+  
+        // Calcula a idade com base na data de nascimento
+        const age = personData.birthDate
+          ? Math.floor((new Date() - new Date(personData.birthDate)) / (365.25 * 24 * 60 * 60 * 1000))
+          : null;
+  
+        return {
+          ...personData,
+          age, // Adiciona a idade calculada
+          clothes: personData.ClothingWorn, // Renomeia o campo
+          photoUri: personData.Photo
+            ? `${req.protocol}://${req.get('host')}/uploads/${path.basename(personData.Photo)}`
+            : null
+
+        };
+      });
+  
+      return res.status(200).json(processedPeople);
+    } catch (error) {
+      console.error('Error fetching disappeared people:', error.message);
+      return res.status(500).json({
+        error: 'An error occurred while fetching disappeared people',
+        details: error.message
+      });
+    }
+  };
+  
   
   module.exports = {
-    createDisappeared: [upload.fields([{ name: 'photo' }, { name: 'boDocument' }]), createDisappeared]
-  };
+    createDisappeared: [upload.fields([{ name: 'photo' }, { name: 'boDocument' }]), createDisappeared], getAllDisappeared
+  } ;
   
