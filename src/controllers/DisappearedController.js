@@ -94,6 +94,14 @@ const createDisappeared = async (req, res) => {
         BoVerified,
         Photo: photoPath
       });
+
+      const photoUri = photoPath 
+      ? `${req.protocol}://${req.get('host')}/uploads/${path.basename(photoPath)}`
+      : null;
+
+    const boDocumentUri = boDocumentPath
+      ? `${req.protocol}://${req.get('host')}/uploads/${path.basename(boDocumentPath)}`
+      : null;
   
       res.status(201).json({
         message: 'Disappeared person registered successfully',
@@ -138,27 +146,48 @@ const createDisappeared = async (req, res) => {
         const age = personData.birthDate
           ? Math.floor((new Date() - new Date(personData.birthDate)) / (365.25 * 24 * 60 * 60 * 1000))
           : null;
-  
-        return {
-          ...personData,
-          age, // Adiciona a idade calculada
-          clothes: personData.ClothingWorn, // Renomeia o campo
-          photoUri: personData.Photo
-            ? `${req.protocol}://${req.get('host')}/uploads/${path.basename(personData.Photo)}`
-            : null
 
-        };
-      });
-  
-      return res.status(200).json(processedPeople);
-    } catch (error) {
-      console.error('Error fetching disappeared people:', error.message);
-      return res.status(500).json({
-        error: 'An error occurred while fetching disappeared people',
-        details: error.message
-      });
-    }
-  };
+
+          let photoUri = null;
+      if (personData.Photo && Buffer.isBuffer(personData.Photo)) {
+        // Generate a unique filename
+        const filename = `missing_person_${personData.Cpf}_${Date.now()}.jpg`;
+        const filepath = path.join(__dirname, 'uploads', filename);
+
+        try {
+          // Ensure uploads directory exists
+          const uploadsDir = path.join(__dirname, 'uploads');
+          if (!fs.existsSync(uploadsDir)){
+            fs.mkdirSync(uploadsDir, { recursive: true });
+          }
+
+          // Write buffer to file
+          fs.writeFileSync(filepath, personData.Photo);
+
+          // Create URL for the image
+          photoUri = `${req.protocol}://${req.get('host')}/uploads/${filename}`;
+        } catch (fileError) {
+          console.error('Error saving photo:', fileError);
+        }
+      }
+
+      return {
+        ...personData,
+        age,
+        clothes: personData.ClothingWorn,
+        photoUri
+      };
+    });
+
+    return res.status(200).json(processedPeople);
+  } catch (error) {
+    console.error('Error fetching disappeared people:', error.message);
+    return res.status(500).json({
+      error: 'An error occurred while fetching disappeared people',
+      details: error.message
+    });
+  }
+};
   
   
   module.exports = {
